@@ -41,12 +41,14 @@ functions:
       - http:
           path: products
           method: get
+          cors: true
   getProductById:
     handler: handler.getProductById
     events:
       - http:
           path: product/{productId}
           method: get
+          cors: true
 
 
 #    The following are a few example events you can configure

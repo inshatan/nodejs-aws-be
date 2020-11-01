@@ -1,6 +1,11 @@
 import * as service from '../services/products';
 import { getProductById } from './getProductById';
 
+const headers = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Credentials': true,
+};
+
 describe('getProductById handler', () => {
   const event = { pathParameters: { productId: 1 } };
 
@@ -19,6 +24,7 @@ describe('getProductById handler', () => {
     service.getProduct = jest.fn().mockReturnValue(data);
     return expect(getProductById(event)).resolves.toEqual({
       statusCode: 200,
+      headers,
       body: JSON.stringify(data),
     });
   });
@@ -30,7 +36,8 @@ describe('getProductById handler', () => {
     });
     return expect(getProductById(event)).resolves.toEqual({
       statusCode: 404,
-      body: error.message,
+      headers,
+      body: JSON.stringify({ error: error.message }),
     });
   });
 });
