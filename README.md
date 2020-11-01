@@ -14,7 +14,7 @@
 - \+ Async/await was used
 - \+ ES6 modules were used
 - \+ Webpack was configured
-- \+ SWAGGER documentation is (https://app.swaggerhub.com/apis/inshatan/node-aws-be/1.0.0)
+- \+ SWAGGER documentation is provided (https://app.swaggerhub.com/apis/inshatan/node-aws-be/1.0.0)
 - \+ Lambda handler getProductById is covered by UNIT tests with JEST
 - \+ Lambda handlers were written not in separated files
 - \+ Error scenario is handled by API. If there is no product with requested ID the try catch block is used to handle the response.
