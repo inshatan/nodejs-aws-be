@@ -1,0 +1,40 @@
+
+service: product-service
+
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: eu-west-1
+
+  apiGateway:
+    shouldStartNameWithService: true
+
+plugins:
+  - serverless-webpack
+
+custom:
+  webpack:
+    webpackConfig: 'webpack.config.js'
+    includeModules: true
+
+functions:
+  getAllProducts:
+    handler: handlers/getProductsList.getAllProducts
+    events:
+      - http:
+          path: products
+          method: get
+          cors: true
+  getProductById:
+    handler: handlers/getProductById.getProductById
+    events:
+      - http:
+          path: product/{productId}
+          method: get
+          cors: true
+
+package:
+  individually: true
