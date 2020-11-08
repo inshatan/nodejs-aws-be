@@ -1,13 +1,19 @@
-import { listProducts } from '../services/products';
+import response from '../utils/response';
+import { createClient, queryAllProducts } from '../utils/db';
 
 export const getAllProducts = async (event) => {
-  const list = await listProducts();
-  return {
-    statusCode: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Credentials': true,
-    },
-    body: JSON.stringify(list, null, 2),
-  };
+  // logging incoming event
+  console.log(event);
+
+  let client = null;
+  try {
+    client = createClient();
+    await client.connect();
+    const listOfProducts = await queryAllProducts(client);
+    return response(200, listOfProducts);
+  } catch (error) {
+    return response(500, { error: error.message });
+  } finally {
+    client && await client.end();
+  }
 };

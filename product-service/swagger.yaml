@@ -27,8 +27,8 @@ paths:
         in: path
         description: ID of product to return
         required: true
-        type: integer
-        format: int64
+        type: string
+        format: uuid
       responses:
         "200":
           description: successful operation
@@ -55,19 +55,60 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Product'
+    post:
+      tags:
+      - products
+      summary: create product
+      description: Create new book
+      operationId: createProduct
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: product
+        description: Book data
+        required: false
+        schema:
+          type: object
+          required:
+          - count
+          - price
+          - title
+          properties:
+            title:
+              type: string
+              default: First book
+            description:
+              type: string
+              default: No very long description of the book
+            count:
+              type: integer
+            price:
+              type: integer
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Product'
 definitions:
   Product:
     type: object
     required:
+    - count
+    - id
     - title
     properties:
+      id:
+        type: string
+        format: uuid
       title:
         type: string
         example: First book
       description:
-        type: string
-        example: Short Book Description
-      id:
         type: string
         example: Short Book Description
       price:

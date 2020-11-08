@@ -14,6 +14,7 @@ provider:
 
 plugins:
   - serverless-webpack
+  - serverless-dotenv-plugin
 
 custom:
   webpack:
@@ -34,6 +35,13 @@ functions:
       - http:
           path: product/{productId}
           method: get
+          cors: true
+  createProduct:
+    handler: handlers/createProduct.createProduct
+    events:
+      - http:
+          path: products
+          method: post
           cors: true
 
 package:
