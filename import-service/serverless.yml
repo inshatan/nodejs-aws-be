@@ -1,0 +1,32 @@
+service: import-service
+
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: eu-west-1
+
+  apiGateway:
+    shouldStartNameWithService: true
+
+plugins:
+#  - serverless-webpack
+#  - serverless-dotenv-plugin
+
+#custom:
+#  webpack:
+#    webpackConfig: 'webpack.config.js'
+#    includeModules: true
+
+functions:
+  importProductsFile:
+    handler: handlers.importProductsFile
+    events:
+      - http:
+          path: import/{name}
+          method: get
+          cors: true
+#package:
+#  individually: true
