@@ -1,38 +1,31 @@
-import { getProduct } from '../services/products';
+import { createClient, queryProduct } from '../utils/db';
+import response from '../utils/response';
 
 export const getProductById = async (event) => {
-  console.log('... getProductById');
+  // logging incoming event
+  console.log(event);
+
   const { pathParameters } = event;
   const { productId } = pathParameters || {};
-  const headers = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Credentials': true,
-  };
 
   if (!productId) {
-    return {
-      statusCode: 400,
-      headers,
-      body: JSON.stringify({
-        error: 'missing product id',
-      }),
-    };
+    return response(400, { error: 'missing product id' });
+  }
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(productId)) {
+    return response(400, { error: 'invalid product id' });
   }
 
+  let client = null;
   try {
-    const product = await getProduct(productId);
-    return {
-      statusCode: 200,
-      headers,
-      body: JSON.stringify(product),
-    };
+    client = createClient();
+    await client.connect();
+    const product = await queryProduct(client, productId);
+    return product
+      ? response(200, product)
+      : response(404, { error: `Product with id ${productId} not found` });
   } catch (error) {
-    return {
-      statusCode: 404,
-      headers,
-      body: JSON.stringify({
-        error: error.message,
-      }),
-    };
+    return response(500, { error: error.message });
+  } finally {
+    client && await client.end();
   }
 };

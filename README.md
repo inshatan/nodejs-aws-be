@@ -1,35 +1,47 @@
+# Task 4
 
-# 1. What was done
+API: https://ojlkuvsx07.execute-api.eu-west-1.amazonaws.com/dev
 
-### Main tasks
-   
-- \+ serverless.yml contains configuration for 2 lambda functions and API is working
-- \+ getProductsList: https://ojlkuvsx07.execute-api.eu-west-1.amazonaws.com/dev/products/
-- \+ getProductsById: https://ojlkuvsx07.execute-api.eu-west-1.amazonaws.com/dev/product/1/
-- \+ Frontend application is integrated with product service: https://d2v14ttltat414.cloudfront.net
+Frontend application: https://d2v14ttltat414.cloudfront.net
 
 
-### Optional Tasks
+### Main tasks 
 
-- \+ Async/await was used
-- \+ ES6 modules were used
-- \+ Webpack was configured
-- \+ SWAGGER documentation is provided (https://app.swaggerhub.com/apis/inshatan/node-aws-be/1.0.0)
-- \+ Lambda handler getProductById is covered by UNIT tests with JEST
-- \+ Lambda handlers were written not in separated files
-- \+ Error scenario is handled by API. If there is no product with requested ID the try catch block is used to handle the response.
+- Task 4.1 is implemented.
+
+  File ./db/queries.sql contains sql queries to create tables and insert some data
 
 
-# 2. Link to product-service API 
+- Task 4.2 is implemented.
 
-https://ojlkuvsx07.execute-api.eu-west-1.amazonaws.com/dev
-
-
-# 3. LInk to FE MR (in my own repository)
-
-https://github.com/inshatan/nodejs-aws-fe/pull/2
+  list of all products: https://ojlkuvsx07.execute-api.eu-west-1.amazonaws.com/dev/products/
+  
+  one of products: https://ojlkuvsx07.execute-api.eu-west-1.amazonaws.com/dev/product/030f5ee8-b461-4543-ac4b-103032945249
 
 
-# 4. SWAGGER file
+- Task 4.3 is implemented.
 
-The swagger file is located at the path ./product-service/swagger.yaml
+  To create new product you should send post request to https://ojlkuvsx07.execute-api.eu-west-1.amazonaws.com/dev/products/
+
+  Swagger documentation can be accessed at https://app.swaggerhub.com/apis/inshatan/node-aws-be/1.0.0
+
+  Swagger file is located at the path ./product-service/swagger.yaml
+  
+  
+- Frontend application is integrated with product service.
+
+   Link to the application https://d2v14ttltat414.cloudfront.net
+
+
+
+### Additional tasks 
+
+
+- \+ POST/products lambda functions returns error 400 status code if product data is invalid
+
+- \+ All lambdas return error 500 status code on any error (DB connection, any unhandled error in code)
+
+- \+ All lambdas do console.log for each incoming requests and their arguments
+
+- \+ Transaction based creation of product
+ 
