@@ -17,6 +17,11 @@ provider:
         - "s3:*"
       Resource:
         - "arn:aws:s3:::node-aws-files-bucket/*"
+    - Effect: 'Allow'
+      Action:
+        - "s3:ListBucket"
+      Resource:
+        - "arn:aws:s3:::node-aws-files-bucket"
 
 plugins:
 
@@ -44,3 +49,10 @@ functions:
           rules:
             - prefix: uploaded/
           existing: true
+  listParsedFiles:
+    handler: handlers.listParsedFiles
+    events:
+      - http:
+          path: list
+          method: get
+          cors: true
