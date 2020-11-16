@@ -11,22 +11,36 @@ provider:
   apiGateway:
     shouldStartNameWithService: true
 
-plugins:
-#  - serverless-webpack
-#  - serverless-dotenv-plugin
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - "s3:*"
+      Resource:
+        - "arn:aws:s3:::node-aws-files-bucket/*"
 
-#custom:
-#  webpack:
-#    webpackConfig: 'webpack.config.js'
-#    includeModules: true
+plugins:
+
+custom:
+  s3FilesBucketName: node-aws-files-bucket
 
 functions:
   importProductsFile:
     handler: handlers.importProductsFile
     events:
       - http:
-          path: import/{name}
+          path: import
           method: get
           cors: true
-#package:
-#  individually: true
+          request:
+            parameters:
+              querystrings:
+                  name: true,
+  importFileParser:
+    handler: handlers.importFileParser
+    events:
+      - s3:
+          event: s3:ObjectCreated:*
+          bucket: ${self:custom.s3FilesBucketName}
+          rules:
+            - prefix: uploaded/
+          existing: true

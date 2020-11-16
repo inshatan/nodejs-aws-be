@@ -1,18 +1,23 @@
-const headers = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Credentials': true,
-};
+const { S3 } = require('aws-sdk');
+const response = require('../utils/response');
+const { BUCKET_NAME, S3_OPTIONS } = require('../utils/constants');
 
 module.exports = async function importProductsFile(event) {
-  console.log('triggered');
-  console.log(event);
+  const { name } = event.queryStringParameters || {};
+  if (!name) {
+    return response(500, { error: 'Filename is required' });
+  }
 
-  return {
-    statusCode: 200,
-    headers,
-    body: JSON.stringify({
-      data: 'triggered',
-      path: event.pathParameters,
-    }),
-  };
+  try {
+    const s3 = new S3(S3_OPTIONS);
+    const url = await s3.getSignedUrlPromise('putObject', {
+      Bucket: BUCKET_NAME,
+      Key: `uploaded/${name}`,
+      Expires: 60,
+      ContentType: 'text/csv',
+    });
+    return response.text(200, url);
+  } catch (error) {
+    return response.json(500, { error: error.message });
+  }
 };
