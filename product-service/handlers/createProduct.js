@@ -1,21 +1,7 @@
-import { createClient, queryProduct, queryCreateProduct } from '../utils/db';
+import {
+  createClient, validateProductData, queryProduct, queryCreateProduct,
+} from '../utils/db';
 import response from '../utils/response';
-
-const validateProductData = ({ title, price, count }) => {
-  const errors = [];
-  if (!title) {
-    errors.push('Title is missing');
-  }
-  if (price === '' || isNaN(+price) || Number(price) < 0 || !Number.isInteger(+price)) {
-    errors.push('Wrong or missing price');
-  }
-  if (count === '' || isNaN(+count) || Number(count) < 0 || !Number.isInteger(+count)) {
-    errors.push('Wrong or missing stock count');
-  }
-  if (errors.length) {
-    throw new Error(errors.join('; '));
-  }
-};
 
 export const createProduct = async (event) => {
   // logging incoming event

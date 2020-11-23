@@ -17,6 +17,22 @@ export const createClient = () => new Client({
   connectionTimeoutMillis: 5000, // time in millisecond for termination of the database query
 });
 
+export const validateProductData = ({ title, price, count }) => {
+  const errors = [];
+  if (!title) {
+    errors.push('Title is missing');
+  }
+  if (price === '' || isNaN(+price) || Number(price) < 0 || !Number.isInteger(+price)) {
+    errors.push('Wrong or missing price');
+  }
+  if (count === '' || isNaN(+count) || Number(count) < 0 || !Number.isInteger(+count)) {
+    errors.push('Wrong or missing stock count');
+  }
+  if (errors.length) {
+    throw new Error(errors.join('; '));
+  }
+};
+
 export const queryProduct = async (client, productId) => {
   const { rows } = await client.query({
     text: `
