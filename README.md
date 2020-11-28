@@ -1,34 +1,23 @@
-# Task 5
-
+# Task 6
 
 Frontend application: https://d2v14ttltat414.cloudfront.net
 
-Application expects CSV-file without header row in following format: 
-
-    title,description,price
-
-Link for invocation of the lambda function which lists all objects in the parsed folder of the bucket:
-https://2qcr7jqr8k.execute-api.eu-west-1.amazonaws.com/dev/list
+Example CSV-file can be found at ./products.csv
 
 
 ### Main tasks 
 
-- \+ File serverless.yml contains configuration for importProductsFile function
-- \+ The importProductsFile lambda function returns a correct response.
+- \+ product-service/serverless.yml contains configuration for catalogBatchProcess function
+- \+ product-service/serverless.yml contains policies for SNS and import-service/serverless.yml contains policies for SQS
+- \+ product-service/File serverless.yml contains configuration for SQS catalogItemsQueue
+- \+ product-service/serverless.yml contains configuration for SNS Topic createProductTopic and email subscription
 
-    To try the request, please use the following url: https://2qcr7jqr8k.execute-api.eu-west-1.amazonaws.com/dev/import?name=name
-    
-- \+ Frontend application is integrated with importProductsFile lambda.
-    
-    Link to the upload form: https://d2v14ttltat414.cloudfront.net/admin/products
-    
-- \+ The importFileParser lambda function is implemented and serverless.yml contains configuration for the lambda
+### Additional (optional) tasks
+
+- \+ catalogBatchProcess lambda is covered by unit tests
+- \+ Filter Policy for SNS is configured based on the MessageAttributes
+ 
 
 
-### Additional tasks 
-
-- \+ async/await is used in lambda functions
-- \+ importProductsFile lambda is covered by unit tests 
-- \+ At the end of the stream the lambda function moves the file from the uploaded folder into the parsed folder 
 
 

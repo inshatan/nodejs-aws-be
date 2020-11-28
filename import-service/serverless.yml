@@ -16,17 +16,21 @@ provider:
       Action:
         - "s3:*"
       Resource:
-        - "arn:aws:s3:::node-aws-files-bucket/*"
+        - arn:aws:s3:::${self:provider.environment.S3_BUCKET_NAME}/*
     - Effect: 'Allow'
       Action:
-        - "s3:ListBucket"
+        - s3:ListBucket
       Resource:
-        - "arn:aws:s3:::node-aws-files-bucket"
+        - arn:aws:s3:::${self:provider.environment.S3_BUCKET_NAME}
+    - Effect: 'Allow'
+      Action:
+        - sqs:*
+      Resource:
+        - arn:aws:sqs:eu-west-1:759177250399:product-service-queue
+        # FIXME
 
 plugins:
-
-custom:
-  s3FilesBucketName: node-aws-files-bucket
+  - serverless-dotenv-plugin
 
 functions:
   importProductsFile:
@@ -45,7 +49,8 @@ functions:
     events:
       - s3:
           event: s3:ObjectCreated:*
-          bucket: ${self:custom.s3FilesBucketName}
+          bucket: ${self:provider.environment.S3_BUCKET_NAME}
+          # bucket: ${self:custom.s3FilesBucketName}
           rules:
             - prefix: uploaded/
           existing: true

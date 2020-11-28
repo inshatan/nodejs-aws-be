@@ -12,6 +12,18 @@ provider:
   apiGateway:
     shouldStartNameWithService: true
 
+  environment:
+    SRV_REGION: ${self:provider.region}
+    SNS_ARN:
+      Ref: SNSCreateProductTopic
+
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - "sns:*"
+      Resource:
+        Ref: SNSCreateProductTopic
+
 plugins:
   - serverless-webpack
   - serverless-dotenv-plugin
@@ -20,6 +32,47 @@ custom:
   webpack:
     webpackConfig: 'webpack.config.js'
     includeModules: true
+
+resources:
+  Outputs:
+    SQSCatalogItemsUrl:
+      Value:
+        Ref: catalogItemsQueue
+    SQSCatalogItems:
+      Value:
+        Fn::GetAtt: [catalogItemsQueue, Arn]
+  Resources:
+    catalogItemsQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: product-service-queue
+    SNSCreateProductTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: product-service-sns
+    SNSCreateProductSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: ${self:provider.environment.SNS_EMAIL_DEFAULT}
+        Protocol: email
+        TopicArn:
+          Ref: SNSCreateProductTopic
+        FilterPolicy:
+           status:
+             - success
+#          productId:
+#            - exists: true
+    SNSErrorsSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: ${self:provider.environment.SNS_EMAIL_ERRORS}
+        Protocol: email
+        TopicArn:
+          Ref: SNSCreateProductTopic
+        FilterPolicy:
+          status:
+            - anything-but:
+                - success
 
 functions:
   getAllProducts:
@@ -43,6 +96,15 @@ functions:
           path: products
           method: post
           cors: true
+  catalogBatchProcess:
+    handler: handlers/catalogBatchProcess.handler
+    events:
+      - sqs:
+          batchSize: 5
+          arn:
+            Fn::GetAtt:
+              - catalogItemsQueue
+              - Arn
 
 package:
   individually: true
