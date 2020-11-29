@@ -39,7 +39,7 @@ FrontEnd Application pull request: https://github.com/inshatan/nodejs-aws-fe/pul
 
 Lambda function protected by Cognito Authorizer:
 
-    https://l4dm0oh5l8.execute-api.eu-west-1.amazonaws.com/dev/protected
+    https://tcs7zu6e42.execute-api.eu-west-1.amazonaws.com/dev/protected
 
 Login page URL:
 
