@@ -1,0 +1,93 @@
+service: authorization-service
+
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: eu-west-1
+
+  apiGateway:
+    shouldStartNameWithService: true
+
+
+
+plugins:
+  - serverless-dotenv-plugin
+
+
+
+functions:
+
+  basicAuthorizer:
+    handler: handlers.basicAuthorizer
+
+  cognitoProtectedLambda:
+    handler: handlers.cognitoProtectedLambda
+    events:
+      - http:
+          path: protected
+          method: get
+          cors: true
+          authorizer:
+            name: cognitoAuthorizer
+            type: COGNITO_USER_POOLS
+            identitySource: method.request.header.Authorization
+            arn:
+              Fn::GetAtt:
+                - AuthorizationUserPool
+                - Arn
+
+
+resources:
+
+  Outputs:
+    AuthorizationLambdaArn:
+      Description: The ARN of the lambda function for basic authorization
+      Value:
+        'Fn::GetAtt': [BasicAuthorizerLambdaFunction, Arn]
+
+  Resources:
+    AuthorizationUserPool:
+      Type: AWS::Cognito::UserPool
+      Properties:
+        MfaConfiguration: OFF
+        UserPoolName: node-aws-user-pool
+        UsernameAttributes:
+          - email
+        Policies:
+          PasswordPolicy:
+            MinimumLength: 6
+            RequireLowercase: False
+            RequireNumbers: False
+            RequireSymbols: False
+            RequireUppercase: False
+        AutoVerifiedAttributes:
+          - email
+    AuthorizationUserPoolClient:
+      Type: AWS::Cognito::UserPoolClient
+      Properties:
+        ClientName: node-aws-user-pool-client
+        UserPoolId:
+          Ref: AuthorizationUserPool
+        SupportedIdentityProviders:
+          - COGNITO
+        AllowedOAuthFlowsUserPoolClient: True
+        AllowedOAuthFlows:
+          - implicit
+        AllowedOAuthScopes:
+          - phone
+          - email
+          - openid
+          - profile
+        GenerateSecret: False
+        CallbackURLs:
+          - https://${cf:node-aws-auto-${self:provider.stage}.WebAppCloudFrontDistributionOutput}
+    AuthorizationUserPoolDomain:
+      Type: AWS::Cognito::UserPoolDomain
+      Properties:
+        Domain: inshatan
+        UserPoolId:
+          Ref: AuthorizationUserPool
+
