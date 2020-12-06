@@ -1,0 +1,26 @@
+service: cart-service
+
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: eu-west-1
+
+  apiGateway:
+    shouldStartNameWithService: true
+
+functions:
+  proxy:
+    handler: handlers.fake
+    events:
+      - http:
+          method: any
+          path: /{proxy+}
+          integration: http_proxy
+          request:
+            uri: http://inshatan-cart-api-dev.eu-west-1.elasticbeanstalk.com/api/{proxy}
+            parameters:
+              paths:
+                proxy: true
