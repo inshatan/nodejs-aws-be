@@ -1,0 +1,10 @@
+{
+  "name": "cart-service",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "deploy": "sls deploy"
+  },
+  "author": "",
+  "license": "ISC"
+}
