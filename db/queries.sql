@@ -46,3 +46,9 @@ SELECT
 FROM products;
 
 
+
+
+
+-- dateteime_created
+ALTER TABLE products ADD datetime_created timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP;
+
