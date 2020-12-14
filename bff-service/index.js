@@ -30,7 +30,7 @@ app.get('/*', async (req, res) => {
     const { data } = await axios({
       method,
       url: `${recipientUrl}/${urlParts.slice(2).join('/')}`,
-      ...(Object.keys(body || {}).length > 0 && { data: req.body }),
+      ...(Object.keys(body || {}).length > 0 && { data: body }),
     });
     if (useCache) {
       console.log('... caching');
