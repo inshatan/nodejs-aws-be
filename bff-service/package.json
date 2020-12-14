@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
     "start:dev": "nodemon index.js",
-    "deploy": "eb deploy"
+    "deploy": "eb deploy",
+    "set-env" : "eb setenv `cat .env | sed '/^#/ d' | sed '/^$/ d'`"
   },
   "author": "",
   "license": "ISC",
