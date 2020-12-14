@@ -1,29 +1,32 @@
 # Task 9 (Backend For Frontend)
 
 
-- product-service: https://ojlkuvsx07.execute-api.eu-west-1.amazonaws.com/dev
+#### product-service
 
-  * all products: https://ojlkuvsx07.execute-api.eu-west-1.amazonaws.com/dev/products/
-  
-  * single product: https://ojlkuvsx07.execute-api.eu-west-1.amazonaws.com/dev/product/030f5ee8-b461-4543-ac4b-103032945249
+- endpoint: https://ojlkuvsx07.execute-api.eu-west-1.amazonaws.com/dev
+- all products: https://ojlkuvsx07.execute-api.eu-west-1.amazonaws.com/dev/products/ 
+- single product: https://ojlkuvsx07.execute-api.eu-west-1.amazonaws.com/dev/product/030f5ee8-b461-4543-ac4b-103032945249
 
-- cart-service: http://inshatan-cart-api-dev.eu-west-1.elasticbeanstalk.com
 
-  * user cart:  http://inshatan-cart-api-dev.eu-west-1.elasticbeanstalk.com/api/profile/cart
+#### cart-service
 
-- **bff-service**: http://inshatan-bff-api-dev.eu-west-1.elasticbeanstalk.com
+- endpoint: http://inshatan-cart-api-dev.eu-west-1.elasticbeanstalk.com
+- user cart:  http://inshatan-cart-api-dev.eu-west-1.elasticbeanstalk.com/api/profile/cart
 
-  * all products: http://inshatan-bff-api-dev.eu-west-1.elasticbeanstalk.com/products/products
+#### *bff-service*
 
-  * single product: http://inshatan-bff-api-dev.eu-west-1.elasticbeanstalk.com/products/product/030f5ee8-b461-4543-ac4b-103032945249
+- endpoint: http://inshatan-bff-api-dev.eu-west-1.elasticbeanstalk.com
+- all products: http://inshatan-bff-api-dev.eu-west-1.elasticbeanstalk.com/products/products
+- single product: http://inshatan-bff-api-dev.eu-west-1.elasticbeanstalk.com/products/product/030f5ee8-b461-4543-ac4b-103032945249
+- user cart:  http://inshatan-bff-api-dev.eu-west-1.elasticbeanstalk.com/cart/api/profile/cart
 
-  * user cart:  http://inshatan-bff-api-dev.eu-west-1.elasticbeanstalk.com/cart/api/profile/cart
+#### Create product
 
-- to create product you can use Frontend Application (https://d2v14ttltat414.cloudfront.net).
+To create product you can use Frontend Application (https://d2v14ttltat414.cloudfront.net).
    
-  Please use a csv file in the form (example can be found in the file **./products.csv**): 
+Please use a csv file in the form (example can be found in the file **./products.csv**): 
   
-        title,description,price,count
+    title,description,price,count
     
  
 ## Main tasks
@@ -41,10 +44,6 @@ How to test:
   * Get products list - result shouldn’t have new product
   * Wait more than 2 minutes
   * Get products list - result should have new product
-* [ ] **+1** - Use **NestJS** to create **bff-service** instead of **express**
-
-
-
-
+* [x] **+1** - Use **NestJS** to create **bff-service** instead of **express**
 
 
