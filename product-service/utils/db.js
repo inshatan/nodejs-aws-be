@@ -52,6 +52,7 @@ export const queryAllProducts = async (client) => {
       SELECT products.*, stocks.count 
       FROM products
       LEFT JOIN stocks ON products.id = stocks.product_id
+      ORDER BY datetime_created DESC
     `,
   });
   return rows;

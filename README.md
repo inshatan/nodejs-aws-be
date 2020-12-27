@@ -1,57 +1,49 @@
-# Task 7
-
-Frontend application: https://d2v14ttltat414.cloudfront.net
-
-Basic Authorization Token (inshatan:TEST_PASSWORD):
-
-    aW5zaGF0YW46VEVTVF9QQVNTV09SRA==
-
-To change authorization header please use the following command in the browser console:
-
-    localStorage.setItem('authorization_token', 'aW5zaGF0YW46VEVTVF9QQVNTV09SRA==');
-
-URL for import-service import endpoint:
-
-    https://2qcr7jqr8k.execute-api.eu-west-1.amazonaws.com/dev/import?name=filename
+# Task 9 (Backend For Frontend)
 
 
-Example CSV-file can be found at ./products.csv
+#### product-service
 
-FrontEnd Application pull request: https://github.com/inshatan/nodejs-aws-fe/pull/4
+- endpoint: https://ojlkuvsx07.execute-api.eu-west-1.amazonaws.com/dev
+- all products: https://ojlkuvsx07.execute-api.eu-west-1.amazonaws.com/dev/products/ 
+- single product: https://ojlkuvsx07.execute-api.eu-west-1.amazonaws.com/dev/product/030f5ee8-b461-4543-ac4b-103032945249
 
 
-### Main tasks 
+#### cart-service
+
+- endpoint: http://inshatan-cart-api-dev.eu-west-1.elasticbeanstalk.com
+- user cart:  http://inshatan-cart-api-dev.eu-west-1.elasticbeanstalk.com/api/profile/cart
+
+#### *bff-service*
+
+- endpoint: http://inshatan-bff-api-dev.eu-west-1.elasticbeanstalk.com
+- all products: http://inshatan-bff-api-dev.eu-west-1.elasticbeanstalk.com/products/products
+- single product: http://inshatan-bff-api-dev.eu-west-1.elasticbeanstalk.com/products/product/030f5ee8-b461-4543-ac4b-103032945249
+- user cart:  http://inshatan-bff-api-dev.eu-west-1.elasticbeanstalk.com/cart/api/profile/cart
+
+#### Create product
+
+To create product you can use Frontend Application (https://d2v14ttltat414.cloudfront.net).
+   
+Please use a csv file in the form (example can be found in the file **./products.csv**): 
+  
+    title,description,price,count
     
-- [x] 1 - authorization-service is added to the repo, has correct basicAuthorizer lambda and correct serverless.yaml file
-
-- [x] 3 - import-service serverless.yaml file has authorizer configuration for the importProductsFile lambda. Request to the importProductsFile lambda should work only with correct authorization_token being decoded and checked by basicAuthorizer lambda. Response should be in 403 HTTP status if access is denied for this user (invalid authorization_token) and in 401 HTTP status if Authorization header is not provided.
-    
-- [x] 5 - update client application to send Authorization: Basic authorization_token header on import. Client should get authorization_token value from browser localStorage https://developer.mozilla.org/ru/docs/Web/API/Window/localStorage authorization_token = localStorage.getItem('authorization_token')
-
-
-### Additional (optional) tasks
-
-- [x] +1 - Client application should display alerts for the responses in 401 and 403 HTTP statuses. This behavior should be added to the nodejs-aws-fe-main/src/index.tsx file
-
-
  
-### just practice, no evaluation
+## Main tasks
 
-Lambda function protected by Cognito Authorizer:
+* [x] **3** - A working and correct **express** application should be in the **bff-service** folder. Reviewer can start this application locally with any valid configuration in the **.env** file and this application should works as described in the task 9.1
+* [x] **5** - The **bff-service** should be deployed with Elastic Beanstalk. The **bff-service** call should be redirected to the appropriate service : **product-service** or **CART**. The response from the **bff-service** should be the same as if **product-service** or **CART** services were called directly.
+ 
+ 
+## Additional (optional) tasks
 
-    https://tcs7zu6e42.execute-api.eu-west-1.amazonaws.com/dev/protected
-
-Login page URL:
-
-    https://inshatan.auth.eu-west-1.amazoncognito.com/login?client_id=1gqdpaqcaaubjnp4b3l16dcm43&response_type=token&scope=email+openid+phone+profile&redirect_uri=https://d2v14ttltat414.cloudfront.net
-
-
-How to make sure that everything works as expected:
-  * Open login page and **Sign up** a new user. Use a real email address to create this user
-  * Verify user using code from the email
-  * After verification and after every login you will be redirected to the Client application. URL should contain **id_token** which can be used to access the **getProducts** lambda
-  * Call **getProducts** lambda using **id_token** as a value for the **Authorization** header
-
-
+* [x] **+1** - Add a cache at the **bff-service** level for a request to the **getProductsList** function of the **product-service**. The cache should expire in 2 minutes.  
+How to test:
+  * Get products list
+  * Create new product
+  * Get products list - result shouldn’t have new product
+  * Wait more than 2 minutes
+  * Get products list - result should have new product
+* [x] **+1** - Use **NestJS** to create **bff-service** instead of **express**
 
 
